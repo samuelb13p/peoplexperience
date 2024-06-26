@@ -22,20 +22,16 @@ import SortableColumn from "./SortableColumn";
 import { Interaction, Row } from "@/schemas/types";
 import Modal from "../Modal";
 
-const initialColumns = ["stage", "payment", "arrived"];
 const newColumnsStages: string[] = ["payment", "arrived", "questions", "sales"];
-
-const initialRows = [
-  { id: "3", stage: "Customer", name: "Antonio", age: 76 },
-  { id: "2", stage: "Oportunities", name: "Jacob", age: 26 },
-  { id: "1", stage: "Image", name: "Samuel", age: 23 },
-  { id: "4", stage: "Emotional", name: "Frijol", age: 76 },
-];
 const newRowsinteractions: Interaction[] = [
-  { id: "5", stage: "Time", name: "Interaction 1", age: 23 },
-  { id: "6", stage: "Channel", name: "Interaction 2", age: 26 },
-  { id: "7", stage: "Process", name: "Interaction 3", age: 76 },
-  { id: "8", stage: "Motivation", name: "Interaction 4", age: 76 },
+  { id: "3", stage: "Customer", delivery: "Antonio", products: 28 },
+  { id: "4", stage: "Emotional", delivery: "Emmanuel", products: 570 },
+  { id: "5", stage: "Time", delivery: "Three Times" },
+  { id: "6", stage: "Channel", payment: "Every Week" },
+  { id: "7", stage: "Process", arrived: "Fortnightly" },
+  { id: "8", stage: "Motivation", questions: "Yes or Not" },
+  { id: "9", stage: "Falt", arrived: "Every Day" },
+  { id: "10", stage: "Error", sales: "Never" },
 ];
 
 interface SortableTableProps {
@@ -81,7 +77,7 @@ const SortableTable: React.FC<SortableTableProps> = ({
 
   const handleAddStage = (stage: string) => {
     setColumns((prev) => [...prev, stage]);
-    setRows(rows.map((row) => ({ ...row, [stage]: stage })));
+    // setRows(rows.map((row) => ({ ...row, [stage]: stage })));
     setShowModalStage(false);
   };
 
@@ -107,17 +103,9 @@ const SortableTable: React.FC<SortableTableProps> = ({
     setRows((prevRows) => prevRows.filter((r) => r.id !== row.id));
 
   return (
-    <div className="p-16">
+    <div className="p-16 text-xs	">
       <div className="flex justify-between align-center">
-        <h1 className="text-3xl mb-8">Journey</h1>
-        <div>
-          <button
-            onClick={() => setShowModalStage(true)}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-3 rounded-full"
-          >
-            <FontAwesomeIcon icon={faPlus} size="1x" />
-          </button>
-        </div>
+        <h1 className="text-3xl ml-3 mb-8 font-semibold">Journey</h1>
       </div>
       <DndContext
         sensors={sensors}
@@ -128,16 +116,36 @@ const SortableTable: React.FC<SortableTableProps> = ({
           items={columns}
           strategy={horizontalListSortingStrategy}
         >
-          <div className={`grid ${columnClasses[columns.length]}`}>
-            {columns.map((column, index) => (
-              <SortableColumn
-                key={column}
-                id={column}
-                column={column}
-                isFirstColumn={index === 0}
-                removeColumn={removeColumn}
-              />
-            ))}
+          <div className={`grid grid-cols-[250px_1fr] gap-4`}>
+            <SortableColumn
+              key={columns[0]}
+              id={columns[0]}
+              column={columns[0]}
+              isFirstColumn={true}
+              removeColumn={removeColumn}
+            />
+            <div className={`grid ${columnClasses[columns.length]}`}>
+              {columns.map(
+                (column, index) =>
+                  index !== 0 && (
+                    <SortableColumn
+                      key={column}
+                      id={column}
+                      column={column}
+                      isFirstColumn={index === 0}
+                      removeColumn={removeColumn}
+                    />
+                  )
+              )}
+              <div className="flex items-center">
+                <button
+                  onClick={() => setShowModalStage(true)}
+                  className="bg-slate-400 ml-5 hover:bg-slate-700 text-white font-bold py-2 px-4 rounded-md"
+                >
+                  <FontAwesomeIcon icon={faPlus} size="2x" />
+                </button>
+              </div>
+            </div>
           </div>
         </SortableContext>
       </DndContext>
@@ -159,13 +167,16 @@ const SortableTable: React.FC<SortableTableProps> = ({
               removeRow={removeRow}
             />
           ))}
-          <div>
-            <button
-              className="w-full py-4 border-solid border-2 rounded-lg m-1 border-slate-600"
-              onClick={() => setShowModalInteraction(true)}
-            >
-              Add Interaction
-            </button>
+          <div className={`grid grid-cols-[250px_1fr] gap-4`}>
+            <div className="flex justify-start ml-3">
+              <button
+                onClick={() => setShowModalInteraction(true)}
+                title="Add Interaction"
+                className="bg-slate-400 mt-5 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded-md"
+              >
+                <FontAwesomeIcon icon={faPlus} size="2x" />
+              </button>
+            </div>
           </div>
         </SortableContext>
       </DndContext>
@@ -191,7 +202,7 @@ const SortableTable: React.FC<SortableTableProps> = ({
                   className="cursor-pointer flex justify-center p-8 rounded-lg shadow-lg bg-slate-300 btn"
                   onClick={() => handleAddStage(stage)}
                 >
-                  <p className="uppercase">{stage}</p>
+                  <p className="capitalize">{stage}</p>
                 </div>
               )
             )}
@@ -207,20 +218,20 @@ const SortableTable: React.FC<SortableTableProps> = ({
         >
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             {newRowsinteractions.map((interaction) =>
-              rows.map((row) => row.name).includes(interaction.name) ? (
+              rows.map((row) => row.stage).includes(interaction.stage) ? (
                 <div
                   key={interaction.id}
                   className="cursor-not-allowed flex justify-center p-8 rounded-lg shadow-lg bg-slate-100 btn"
                 >
-                  {interaction.name}
+                  {interaction.stage}
                 </div>
               ) : (
                 <div
                   key={interaction.id}
-                  className="cursor-pointer justify-center p-8 rounded-lg shadow-lg bg-slate-300 btn"
+                  className="cursor-pointer flex justify-center p-8 rounded-lg shadow-lg bg-slate-300 btn"
                   onClick={() => handleAddInteraction(interaction)}
                 >
-                  {interaction.name}
+                  {interaction.stage}
                 </div>
               )
             )}

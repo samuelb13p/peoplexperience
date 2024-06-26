@@ -28,21 +28,23 @@ const SortableColumn: React.FC<SortableColumnProps> = ({
 
   return (
     <div
-      className="text-center border-solid border-2 rounded-lg m-1 border-slate-600 py-4"
+      className="bg-blue-200 relative flex items-center justify-center text-center border-solid border-2 rounded-md m-1 border-blue-200 py-4"
       ref={setNodeRef}
       style={style}
       {...attributes}
       {...(isFirstColumn ? {} : listeners)}
     >
-      <p className="uppercase">{column}</p>
+      <p className={`uppercase ${!isFirstColumn && "pr-5"}`}>{column}</p>
       {!isFirstColumn && (
-        <button
-          data-no-dnd="true"
-          className="bg-red-200 p-1 rounded-lg ml-0 m-1 "
-          onClick={() => removeColumn(column)}
-        >
-          <FontAwesomeIcon icon={faTrash} size="1x" />
-        </button>
+        <div className="absolute top-50 right-1">
+          <button
+            data-no-dnd="true"
+            className="text-red-500 hover:text-red-700  pr-1 pb-0.5 ml-0 m-1"
+            onClick={() => removeColumn(column)}
+          >
+            <FontAwesomeIcon icon={faTrash} size="1x" />
+          </button>
+        </div>
       )}
     </div>
   );

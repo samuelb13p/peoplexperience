@@ -6,6 +6,8 @@ import { faPlus, faUser } from "@fortawesome/free-solid-svg-icons";
 import projectImage from "../assets/images/home1.png";
 import personaImage from "../assets/images/home2.png";
 import journeyImage from "../assets/images/home3.png";
+import Link from "next/link";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
@@ -14,11 +16,14 @@ export default function Home() {
       <div className="min-h-screen flex flex-col items-center bg-gray-50 text-black">
         <h1 className="text-2xl font-bold mt-10">Welcome, Douglas!</h1>
         <div className="py-4 mt-8">
-          <button className="bg-slate-300 py-2 px-7 flex items-center rounded-md text-black w-full">
+          <Link
+            href={"journey"}
+            className="bg-slate-200 py-2 px-7 flex items-center rounded-md text-black w-full"
+          >
             <span className="mx-auto text-lg font-semibold">
               See your Journeys
             </span>
-          </button>
+          </Link>
         </div>
         <div className="mt-6 flex flex-wrap justify-center gap-6 mt-8">
           <Card
@@ -41,6 +46,7 @@ export default function Home() {
           />
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

@@ -1,8 +1,13 @@
 export interface Interaction {
   id: string;
-  name: string;
+  delivery?: string;
   stage: string;
-  age: number;
+  age?: number;
+  products?: number;
+  payment?: string;
+  arrived?: string;
+  questions?: string;
+  sales?: string;
 }
 
 export interface Row {
